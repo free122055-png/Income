@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>💰 Smart Income App</title>
+
+<style>
+body{
+  margin:0;
+  font-family:sans-serif;
+  background:#0f2027;
+  color:white;
+  text-align:center;
+}
+
+.box{
+  margin:15px;
+  padding:20px;
+  border-radius:20px;
+  background:#203a43;
+}
+
+button{
+  padding:10px 20px;
+  border:none;
+  border-radius:20px;
+  background:#00ffd5;
+  margin:5px;
+}
+
+input{
+  padding:10px;
+  border:none;
+  border-radius:10px;
+  margin:5px;
+}
+
+.history{
+  max-height:200px;
+  overflow:auto;
+  background:#2c5364;
+  padding:10px;
+  border-radius:10px;
+}
+
+.admin{
+  background:#ff9800;
+}
+</style>
+
+</head>
+<body>
+
+<h1>💰 Income App Pro</h1>
+
+<!-- LOGIN -->
+<div class="box">
+  <input id="user" placeholder="Username"><br>
+  <button onclick="login()">Login</button>
+</div>
+
+<!-- PLAN -->
+<div class="box">
+  <h2>Plans</h2>
+  <button onclick="buy(10000,20)">Basic</button>
+  <button onclick="buy(20000,50)">Premium</button>
+</div>
+
+<!-- DASHBOARD -->
+<div class="box">
+  <h2>Dashboard</h2>
+  <p id="balance">Balance: 0৳</p>
+  <p id="daily">Daily: 0৳</p>
+
+  <button onclick="collect()">Collect</button>
+  <button onclick="withdraw()">Withdraw</button>
+</div>
+
+<!-- REFERRAL -->
+<div class="box">
+  <h2>Referral</h2>
+  <p>Your Code: <span id="ref"></span></p>
+  <input id="refInput" placeholder="Enter referral">
+  <button onclick="useRef()">Use</button>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="box admin">
+  <h2>🔐 Admin Panel</h2>
+  <input id="adminPass" placeholder="Admin Password"><br>
+  <input id="addAmount" placeholder="Add Balance"><br>
+  <button onclick="addBalance()">Add Balance</button>
+</div>
+
+<!-- HISTORY -->
+<div class="box">
+  <h2>History</h2>
+  <div id="historyBox" class="history"></div>
+</div>
+
+<script>
+
+// DATA
+let data = JSON.parse(localStorage.getItem("app")) || {
+  user:"",
+  balance:0,
+  daily:0,
+  last:0,
+  history:[],
+  ref:""
+};
+
+// LOGIN
+function login(){
+  data.user = user.value;
+  if(!data.ref){
+    data.ref = "REF"+Math.floor(Math.random()*10000);
+  }
+  save();
+  update();
+}
+
+// BUY PLAN
+function buy(price,daily){
+  data.daily = daily;
+  data.last = Date.now();
+  addHistory("✅ Plan Bought: "+price+"৳");
+  save();
+  update();
+}
+
+// COLLECT
+function collect(){
+  let days = Math.floor((Date.now()-data.last)/(1000*60*60*24));
+  if(days<=0){
+    alert("আজকে already collect করা হয়েছে");
+    return;
+  }
+
+  let income = days*data.daily;
+  data.balance += income;
+  data.last = Date.now();
+
+  addHistory("💰 Income: "+income+"৳");
+  save();
+  update();
+}
+
+// WITHDRAW
+function withdraw(){
+  if(data.balance<=0){
+    alert("Balance নাই");
+    return;
+  }
+
+  addHistory("💸 Withdraw: "+data.balance+"৳");
+  data.balance = 0;
+  save();
+  update();
+}
+
+// REFERRAL
+function useRef(){
+  let r = refInput.value;
+  if(r){
+    data.balance += 50;
+    addHistory("🎁 Referral Bonus 50৳");
+    save();
+    update();
+  }
+}
+
+// 🔥 ADMIN ADD BALANCE
+function addBalance(){
+  let pass = adminPass.value;
+  let amount = parseInt(addAmount.value);
+
+  if(pass !== "admin123"){
+    alert("Wrong Password ❌");
+    return;
+  }
+
+  if(!amount){
+    alert("Amount দাও");
+    return;
+  }
+
+  data.balance += amount;
+  addHistory("🛠 Admin Added: "+amount+"৳");
+
+  save();
+  update();
+
+  alert("Balance Added ✅");
+}
+
+// HISTORY
+function addHistory(text){
+  data.history.unshift(text);
+}
+
+// SAVE
+function save(){
+  localStorage.setItem("app",JSON.stringify(data));
+}
+
+// UPDATE UI
+function update(){
+  balance.innerText="Balance: "+data.balance+"৳";
+  daily.innerText="Daily: "+data.daily+"৳";
+  ref.innerText=data.ref;
+
+  let html="";
+  data.history.forEach(h=>{
+    html+="<p>"+h+"</p>";
+  });
+  historyBox.innerHTML=html;
+}
+
+update();
+
+</script>
+
+</body>
+</html>
