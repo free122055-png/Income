@@ -3,8 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📸 Camera System + Admin</title>
 
-<title>💰 Smart Income App</title>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
 
 <style>
 body{
@@ -15,11 +17,16 @@ body{
   text-align:center;
 }
 
-.box{
-  margin:15px;
+.section{
+  margin:20px;
   padding:20px;
   border-radius:20px;
   background:#203a43;
+}
+
+video,canvas{
+  border-radius:15px;
+  margin-top:10px;
 }
 
 button{
@@ -27,201 +34,104 @@ button{
   border:none;
   border-radius:20px;
   background:#00ffd5;
-  margin:5px;
+  margin:10px;
+  cursor:pointer;
 }
 
 input{
   padding:10px;
   border:none;
   border-radius:10px;
-  margin:5px;
 }
 
-.history{
-  max-height:200px;
-  overflow:auto;
-  background:#2c5364;
-  padding:10px;
+img{
+  width:150px;
+  margin:10px;
   border-radius:10px;
-}
-
-.admin{
-  background:#ff9800;
 }
 </style>
 
 </head>
 <body>
 
-<h1>💰 Income App Pro</h1>
+<h1>📸 Camera Upload System</h1>
 
-<!-- LOGIN -->
-<div class="box">
-  <input id="user" placeholder="Username"><br>
-  <button onclick="login()">Login</button>
+<!-- USER CAMERA -->
+<div class="section">
+  <h2>📸 Take Photo</h2>
+
+  <video id="video" width="300" autoplay></video><br>
+
+  <button onclick="capture()">Capture & Upload</button>
+
+  <br>
+  <canvas id="canvas" width="300" height="200"></canvas>
 </div>
 
-<!-- PLAN -->
-<div class="box">
-  <h2>Plans</h2>
-  <button onclick="buy(10000,20)">Basic</button>
-  <button onclick="buy(20000,50)">Premium</button>
-</div>
-
-<!-- DASHBOARD -->
-<div class="box">
-  <h2>Dashboard</h2>
-  <p id="balance">Balance: 0৳</p>
-  <p id="daily">Daily: 0৳</p>
-
-  <button onclick="collect()">Collect</button>
-  <button onclick="withdraw()">Withdraw</button>
-</div>
-
-<!-- REFERRAL -->
-<div class="box">
-  <h2>Referral</h2>
-  <p>Your Code: <span id="ref"></span></p>
-  <input id="refInput" placeholder="Enter referral">
-  <button onclick="useRef()">Use</button>
-</div>
-
-<!-- ADMIN PANEL -->
-<div class="box admin">
+<!-- ADMIN LOGIN -->
+<div class="section">
   <h2>🔐 Admin Panel</h2>
-  <input id="adminPass" placeholder="Admin Password"><br>
-  <input id="addAmount" placeholder="Add Balance"><br>
-  <button onclick="addBalance()">Add Balance</button>
-</div>
 
-<!-- HISTORY -->
-<div class="box">
-  <h2>History</h2>
-  <div id="historyBox" class="history"></div>
+  <input id="adminPass" placeholder="Enter Password">
+  <button onclick="loginAdmin()">Login</button>
+
+  <div id="adminPanel" style="display:none;">
+    <h3>👑 All Photos</h3>
+    <div id="gallery"></div>
+  </div>
 </div>
 
 <script>
 
-// DATA
-let data = JSON.parse(localStorage.getItem("app")) || {
-  user:"",
-  balance:0,
-  daily:0,
-  last:0,
-  history:[],
-  ref:""
+// 🔥 Firebase Config বসাও
+const firebaseConfig = {
+  apiKey: "PASTE_HERE",
+  authDomain: "PASTE_HERE",
+  projectId: "PASTE_HERE",
+  storageBucket: "PASTE_HERE"
 };
 
-// LOGIN
-function login(){
-  data.user = user.value;
-  if(!data.ref){
-    data.ref = "REF"+Math.floor(Math.random()*10000);
-  }
-  save();
-  update();
-}
+firebase.initializeApp(firebaseConfig);
+const storage = firebase.storage();
 
-// BUY PLAN
-function buy(price,daily){
-  data.daily = daily;
-  data.last = Date.now();
-  addHistory("✅ Plan Bought: "+price+"৳");
-  save();
-  update();
-}
+// camera open
+navigator.mediaDevices.getUserMedia({ video: true })
+.then(stream => {
+  video.srcObject = stream;
+})
+.catch(()=>{
+  alert("Camera permission denied ❌");
+});
 
-// COLLECT
-function collect(){
-  let days = Math.floor((Date.now()-data.last)/(1000*60*60*24));
-  if(days<=0){
-    alert("আজকে already collect করা হয়েছে");
-    return;
-  }
+// capture + upload
+function capture(){
 
-  let income = days*data.daily;
-  data.balance += income;
-  data.last = Date.now();
+  let ctx = canvas.getContext("2d");
+  ctx.drawImage(video,0,0,300,200);
 
-  addHistory("💰 Income: "+income+"৳");
-  save();
-  update();
-}
+  let dataURL = canvas.toDataURL("image/png");
 
-// WITHDRAW
-function withdraw(){
-  if(data.balance<=0){
-    alert("Balance নাই");
-    return;
-  }
+  let fileName = "photo_" + Date.now() + ".png";
 
-  addHistory("💸 Withdraw: "+data.balance+"৳");
-  data.balance = 0;
-  save();
-  update();
-}
+  let ref = storage.ref("photos/" + fileName);
 
-// REFERRAL
-function useRef(){
-  let r = refInput.value;
-  if(r){
-    data.balance += 50;
-    addHistory("🎁 Referral Bonus 50৳");
-    save();
-    update();
-  }
-}
-
-// 🔥 ADMIN ADD BALANCE
-function addBalance(){
-  let pass = adminPass.value;
-  let amount = parseInt(addAmount.value);
-
-  if(pass !== "admin123"){
-    alert("Wrong Password ❌");
-    return;
-  }
-
-  if(!amount){
-    alert("Amount দাও");
-    return;
-  }
-
-  data.balance += amount;
-  addHistory("🛠 Admin Added: "+amount+"৳");
-
-  save();
-  update();
-
-  alert("Balance Added ✅");
-}
-
-// HISTORY
-function addHistory(text){
-  data.history.unshift(text);
-}
-
-// SAVE
-function save(){
-  localStorage.setItem("app",JSON.stringify(data));
-}
-
-// UPDATE UI
-function update(){
-  balance.innerText="Balance: "+data.balance+"৳";
-  daily.innerText="Daily: "+data.daily+"৳";
-  ref.innerText=data.ref;
-
-  let html="";
-  data.history.forEach(h=>{
-    html+="<p>"+h+"</p>";
+  ref.putString(dataURL, 'data_url')
+  .then(()=>{
+    alert("✅ Uploaded!");
   });
-  historyBox.innerHTML=html;
+
 }
 
-update();
+// admin login
+function loginAdmin(){
+  if(adminPass.value === "admin123"){
+    document.getElementById("adminPanel").style.display="block";
+    loadPhotos();
+  }else{
+    alert("Wrong Password ❌");
+  }
+}
 
-</script>
-
-</body>
-</html>
+// load images
+function loadPhotos(){
+  storage.ref("photos").
