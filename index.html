@@ -1,25 +1,119 @@
-// 🔥 COMPLETE FULL-STACK INVESTMENT APP (ALL FILES TOGETHER) // Copy this structure into your project manually
+here<!DOCTYPE html><html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔥 বিশ্বাস আপনার সততা আমাদের</title><style>
+/* ===== ORIGINAL CSS (UNCHANGED) ===== */
+body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);color:white;}
+header{text-align:center;padding:30px;}
+header h1{font-size:35px;background:linear-gradient(90deg,#ff512f,#dd2476,#00c6ff);-webkit-background-clip:text;color:transparent;}
+.controls{text-align:center;padding:10px;}
+#searchBox{width:85%;padding:12px;border-radius:25px;border:none;background:#ffffff15;color:white;outline:none;}
+.simBar{display:flex;overflow-x:auto;gap:10px;padding:10px;scrollbar-width:none;}
+.simBar::-webkit-scrollbar{display:none;}
+.simBtn{padding:10px 18px;border-radius:25px;background:#ffffff10;cursor:pointer;transition:0.3s;}
+.simBtn:hover{background:#00ffd5;color:black;}
+.activeSIM{background:#00ffd5;color:black;box-shadow:0 0 10px #00ffd5;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;padding:15px;}
+.box{background:rgba(255,255,255,0.08);border-radius:20px;padding:15px;text-align:center;transition:0.3s;position:relative;}
+.box:hover{transform:translateY(-5px) scale(1.03);box-shadow:0 0 15px #00ffd5;}
+.gb{font-size:22px;color:#00ffd5;}
+.price{font-size:20px;color:#ffcc00;}
+.valid{font-size:13px;opacity:0.8;}
+button{margin-top:10px;padding:8px 15px;border:none;border-radius:20px;background:linear-gradient(135deg,#ff512f,#dd2476);color:white;cursor:pointer;transition:0.3s;}
+button:hover{transform:scale(1.1);}
+.sectionTitle{text-align:center;margin-top:20px;font-size:20px;}
 
-// ============================= // 📁 1. /lib/db.js // ============================= import mongoose from 'mongoose'
+/* ===== NEW ADDITIONS ONLY ===== */
+.badge{position:absolute;top:10px;left:10px;background:#ff0050;padding:4px 8px;border-radius:10px;font-size:10px;}
+.best{position:absolute;top:10px;right:10px;background:#00ffd5;color:black;padding:4px 8px;border-radius:10px;font-size:10px;}
+.darkMode{background:#111 !important;color:white !important;}
+.toast{position:fixed;bottom:20px;right:20px;background:#00ffd5;color:black;padding:10px 20px;border-radius:10px;display:none;}
+</style></head><body><!-- LOGIN SYSTEM KEPT (UNCHANGED) --><script>
+if(!localStorage.getItem("user")){
+  window.location.href = "user-login.html";
+}
+</script><div id="toast" class="toast">Done</div><div class="controls">
+<input type="text" id="searchBox" placeholder="🔍 Search GB / Price...">
+</div><div style="text-align:center;">
+<button onclick="sortOffers('price')">📊 Price</button>
+<button onclick="sortOffers('gb')">📊 GB</button>
+<button onclick="toggleDark()">🌙 Mode</button>
+</div><div id="main"></div><script>
 
-export const connectDB = async () => { if (mongoose.connections[0].readyState) return await mongoose.connect(process.env.MONGO_URI) }
+let currentSIM="All";
+let sortType="";
 
-// ============================= // 📁 2. /lib/auth.js // ============================= import jwt from 'jsonwebtoken'
+function showToast(msg){
+let t=document.getElementById("toast");
+t.innerText=msg;
+t.style.display="block";
+setTimeout(()=>t.style.display="none",2000);
+}
 
-export const verifyToken = (req) => { const token = req.headers.get('authorization')?.split(' ')[1] if (!token) throw new Error('Unauthorized') return jwt.verify(token, process.env.JWT_SECRET) }
+function toggleDark(){
+document.body.classList.toggle("darkMode");
+}
 
-// ============================= // 📁 3. MODELS // =============================
+function sortOffers(type){
+sortType=type;
+renderOffers();
+}
 
-// /models/User.js import mongoose from 'mongoose'
+function bkashPay(n,p,v){
+let number="01XXXXXXXXX";
+let msg=`💰 Bkash Payment\nOffer: ${n}\nAmount: ${p}৳\n${v}\nSend Money: ${number}`;
+showToast("Redirecting...");
+window.location.href="https://wa.me/8801624228476?text="+encodeURIComponent(msg);
+}
 
-const userSchema = new mongoose.Schema({ email: String, password: String, balance: { type: Number, default: 0 }, isAdmin: { type: Boolean, default: false } })
+function renderOffers(){
+let html="";
+let search=document.getElementById("searchBox").value.toLowerCase();
 
-export default mongoose.models.User || mongoose.model('User', userSchema)
+for(let sim in offers){
+html+=`<div class="sectionTitle">${sim}</div>`;
 
-// /models/Plan.js const planSchema = new mongoose.Schema({ name: String, price: Number, duration: Number, dailyProfit: Number })
+for(let pack in offers[sim]){
+let data=[...offers[sim][pack]];
 
-export const Plan = mongoose.models.Plan || mongoose.model('Plan', planSchema)
+if(sortType==='price') data.sort((a,b)=>a.price-b.price);
+if(sortType==='gb') data.sort((a,b)=>parseInt(a.name)-parseInt(b.name));
 
-// /models/Transaction.js const txSchema = new mongoose.Schema({ userId: mongoose.Schema.Types.ObjectId, type: String, amount: Number, status: { type: String, default: 'pending' } })
+html+=`<div class="sectionTitle">${pack}</div><div class="grid">`;
 
-export const Transaction = mongoose.models.Transaction
+data.forEach(o=>{
+if(o.name==="loading") return;
+let text=(o.name+o.price).toLowerCase();
+if(text.includes(search)){
+html+=`
+<div class="box">
+${o.popular?'<div class="badge">Popular</div>':''}
+${o.best?'<div class="best">Best</div>':''}
+<div class="gb">${o.name}</div>
+<div class="price">${o.price}৳</div>
+<div class="valid">${o.validity}</div>
+<div style="color:gold;">⭐⭐⭐⭐☆</div>
+<button onclick="buy('${o.name}','${o.price}','${o.validity}')">🚀 Buy</button>
+<button onclick="bkashPay('${o.name}','${o.price}','${o.validity}')">💰 bKash</button>
+</div>`;
+}
+});
+
+html+=`</div>`;
+}
+}
+
+document.getElementById("main").innerHTML=html;
+}
+
+function buy(n,p,v){
+let msg=`${n} ${p}৳ ${v}`;
+window.location.href="https://wa.me/8801624228476?text="+encodeURIComponent(msg);
+}
+
+renderOffers();
+document.getElementById("searchBox").addEventListener("input",renderOffers);
+
+</script></body>
+</html>
