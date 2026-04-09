@@ -8,85 +8,83 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
 
-body{
-background:linear-gradient(270deg,#0f0f0f,#1a1a2e,#0f0f0f);
-background-size:600% 600%;
-animation:bg 12s infinite;
-color:white;
-padding-bottom:100px;
-overflow-x:hidden;
-}
+body{background:#0f0f0f;color:white}
 
-@keyframes bg{
-0%{background-position:0%}
-50%{background-position:100%}
-100%{background-position:0%}
-}
-
+/* HEADER */
 header{
 text-align:center;
 padding:15px;
 font-size:22px;
-background:rgba(255,255,255,0.05);
+background:linear-gradient(90deg,#7f5af0,#2cb67d);
 }
 
-/* section */
-.section{display:none;padding:15px;min-height:100vh}
+/* PAGE */
+.page{display:none}
 .active{display:block}
 
-/* card */
+/* HERO */
+.hero{text-align:center;padding:20px}
+.hero h1{font-size:26px}
+
+/* SECTION */
+.section{padding:15px}
+.title{margin-bottom:10px}
+
+/* CARD */
 .card{
-background:rgba(255,255,255,0.05);
+background:#1a1a2e;
 padding:15px;
 border-radius:15px;
 margin-bottom:10px;
 }
 
-/* gallery */
+/* SCROLL */
+.scroll{display:flex;gap:10px;overflow-x:auto}
+.box{
+min-width:140px;height:100px;
+background:#1a1a2e;
+display:flex;align-items:center;justify-content:center;
+border-radius:10px;
+}
+
+/* GRID */
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .grid img{width:100%;border-radius:10px}
 
-/* team */
+/* TEAM */
 .team{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.member{text-align:center;background:rgba(255,255,255,0.05);padding:10px;border-radius:15px}
-.member img{width:80px;height:80px;border-radius:50%}
+.member{background:#1a1a2e;padding:10px;text-align:center;border-radius:10px}
+.member img{width:70px;height:70px;border-radius:50%}
 
-/* nav */
+/* NAV */
 nav{
-position:fixed;
-bottom:0;
-width:100%;
-display:flex;
-background:#000;
+position:fixed;bottom:0;width:100%;
+display:flex;background:#000;
 }
 nav button{
-flex:1;
-padding:10px;
-background:none;
-border:none;
-color:white;
+flex:1;padding:10px;border:none;background:none;color:white;
 }
 nav button.active{color:#7f5af0}
 
-/* popup */
-.popup{
-position:fixed;
-top:0;left:0;
-width:100%;height:100%;
-background:rgba(0,0,0,.8);
-display:none;
-justify-content:center;
-align-items:center;
-}
-.popup-box{
-background:#1a1a2e;
-padding:20px;
-border-radius:15px;
-text-align:center;
+/* INPUT */
+input{width:100%;padding:10px;border-radius:10px;border:none;margin-top:10px}
+
+/* BUTTON */
+.btn{
+margin-top:10px;padding:10px;width:100%;
+background:#7f5af0;color:white;border:none;border-radius:10px;
 }
 
-/* like */
-.like{background:#7f5af0;padding:8px;border-radius:10px;display:inline-block;margin-top:10px}
+/* POPUP */
+.popup{
+position:fixed;top:0;left:0;width:100%;height:100%;
+background:rgba(0,0,0,.8);
+display:none;justify-content:center;align-items:center;
+}
+.popup-box{
+background:#1a1a2e;padding:20px;border-radius:15px;text-align:center;
+}
+.popup img{width:100px;border-radius:50%}
 </style>
 </head>
 
@@ -95,41 +93,90 @@ text-align:center;
 <header>🔥 Zentrix Studio</header>
 
 <!-- HOME -->
-<div id="home" class="section active">
-<div class="card">
-<h3>🔥 Update</h3>
-<p>কাজ শুরু করো</p>
-<div class="like" onclick="like()">❤️ Like (<span id="count">0</span>)</div>
+<div id="home" class="page active">
+<div class="hero">
+<h1>Welcome 🎬</h1>
+<p>Creative Team Dashboard</p>
+</div>
+
+<div class="section">
+<div class="title">🔥 Trending</div>
+<div class="scroll">
+<div class="box">Edit 1</div>
+<div class="box">Edit 2</div>
+<div class="box">Edit 3</div>
+</div>
+</div>
+
+<div class="section">
+<div class="title">📢 Update</div>
+<div class="card">আজকের কাজ শুরু করো 🔥</div>
+</div>
+
+<div class="section">
+<div class="title">⭐ Stats</div>
+<div class="scroll">
+<div class="box">20 Member</div>
+<div class="box">50 Video</div>
+<div class="box">100 Post</div>
+</div>
 </div>
 </div>
 
 <!-- GALLERY -->
-<div id="gallery" class="section">
+<div id="gallery" class="page">
+<div class="section">
+<div class="title">🖼️ Gallery</div>
 <div class="grid">
 <img src="https://picsum.photos/300">
 <img src="https://picsum.photos/301">
+<img src="https://picsum.photos/302">
+<img src="https://picsum.photos/303">
+</div>
 </div>
 </div>
 
 <!-- SCRIPT -->
-<div id="script" class="section">
+<div id="script" class="page">
+<div class="section">
+<div class="title">🎬 Video</div>
 <div class="card">
-<h3>🎬 Video</h3>
 <video controls width="100%">
 <source src="your-video.mp4">
 </video>
+<p>এখানে স্ক্রিপ্ট লিখো</p>
+</div>
 </div>
 </div>
 
-<!-- TEAM -->
-<div id="team" class="section">
+<!-- TEAM + CHARGE -->
+<div id="team" class="page">
+<div class="section">
+
+<div class="title">👥 Team</div>
+
+<div class="card">
+<h3>💰 Balance: <span id="balance">0</span> ৳</h3>
+<input id="amount" placeholder="Amount">
+<button class="btn" onclick="addMoney()">Add Balance</button>
+</div>
+
+<div class="card">
+<h3>🔍 Search Member</h3>
+<input id="searchInput" placeholder="নাম লিখো...">
+<button class="btn" onclick="searchMember()">Search</button>
+<p id="msg" style="color:red"></p>
+</div>
+
 <div class="team" id="teamList"></div>
+
+</div>
 </div>
 
 <!-- POPUP -->
 <div class="popup" id="popup" onclick="closePopup()">
 <div class="popup-box" onclick="event.stopPropagation()">
-<img id="pimg" width="100">
+<img id="pimg">
 <h3 id="pname"></h3>
 <p id="prole"></p>
 </div>
@@ -137,63 +184,19 @@ text-align:center;
 
 <!-- NAV -->
 <nav>
-<button onclick="show(event,'home')" class="active">🏠</button>
-<button onclick="show(event,'gallery')">🖼️</button>
-<button onclick="show(event,'script')">🎬</button>
-<button onclick="show(event,'team')">👥</button>
+<button onclick="show('home')">🏠</button>
+<button onclick="show('gallery')">🖼️</button>
+<button onclick="show('script')">🎬</button>
+<button onclick="show('team')">👥</button>
 </nav>
 
 <script>
-let sections=["home","gallery","script","team"];
-let current=0;
-
-/* show */
-function show(e,id){
-current=sections.indexOf(id);
-
-document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+function show(id){
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
 document.getElementById(id).classList.add('active');
-
-document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
-e.currentTarget.classList.add('active');
 }
 
-/* SAFE SWIPE */
-let startX=0,startY=0;
-
-document.addEventListener("touchstart",e=>{
-startX=e.touches[0].clientX;
-startY=e.touches[0].clientY;
-});
-
-document.addEventListener("touchend",e=>{
-let endX=e.changedTouches[0].clientX;
-let endY=e.changedTouches[0].clientY;
-
-let dx=startX-endX;
-let dy=startY-endY;
-
-if(Math.abs(dx)>80 && Math.abs(dy)<50){
-if(dx>0 && current<sections.length-1){current++}
-if(dx<0 && current>0){current--}
-
-document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-document.getElementById(sections[current]).classList.add('active');
-}
-});
-
-/* like */
-let c=0;
-function like(){c++;document.getElementById("count").innerText=c}
-
-/* popup */
-function openProfile(n,r,i){
-document.getElementById("popup").style.display="flex";
-pname.innerText=n;prole.innerText=r;pimg.src=i;
-}
-function closePopup(){popup.style.display="none"}
-
-/* members */
+/* MEMBERS */
 let members=[
 {name:"রহিম",role:"Editor",img:"https://i.pravatar.cc/101"},
 {name:"করিম",role:"Designer",img:"https://i.pravatar.cc/102"},
@@ -217,18 +220,51 @@ let members=[
 {name:"নাবিল",role:"Creator",img:"https://i.pravatar.cc/120"}
 ];
 
-function loadMembers(){
+let balance=0;
+
+function addMoney(){
+let val=parseInt(amount.value);
+if(!val) return;
+balance+=val;
+document.getElementById("balance").innerText=balance;
+amount.value="";
+}
+
+function searchMember(){
+let v=searchInput.value.toLowerCase();
+
+if(balance<50){
+msg.innerText="❌ আগে ৫০ টাকা দাও";
+return;
+}
+
+balance-=50;
+document.getElementById("balance").innerText=balance;
+
 let box=document.getElementById("teamList");
 box.innerHTML="";
-members.forEach(m=>{
+
+members.filter(m=>m.name.toLowerCase().includes(v)).forEach(m=>{
 box.innerHTML+=`
 <div class="member" onclick="openProfile('${m.name}','${m.role}','${m.img}')">
 <img src="${m.img}">
 <h4>${m.name}</h4>
 </div>`;
 });
+
+msg.innerText="✅ Done";
 }
-loadMembers();
+
+/* POPUP */
+function openProfile(n,r,i){
+popup.style.display="flex";
+pname.innerText=n;
+prole.innerText=r;
+pimg.src=i;
+}
+function closePopup(){
+popup.style.display="none";
+}
 </script>
 
 </body>
@@ -242,85 +278,83 @@ loadMembers();
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
 
-body{
-background:linear-gradient(270deg,#0f0f0f,#1a1a2e,#0f0f0f);
-background-size:600% 600%;
-animation:bg 12s infinite;
-white;
-padding-bottom:100px;
-overflow-x:hidden;
-}
+body{background:#0f0f0f;color:white}
 
-@keyframes bg{
-0%{background-position:0%}
-50%{background-position:100%}
-100%{background-position:0%}
-}
-
+/* HEADER */
 header{
 text-align:center;
 padding:15px;
 font-size:22px;
-background:rgba(255,255,255,0.05);
+background:linear-gradient(90deg,#7f5af0,#2cb67d);
 }
 
-/* section */
-.section{display:none;padding:15px;min-height:100vh}
+/* PAGE */
+.page{display:none}
 .active{display:block}
 
-/* card */
+/* HERO */
+.hero{text-align:center;padding:20px}
+.hero h1{font-size:26px}
+
+/* SECTION */
+.section{padding:15px}
+.title{margin-bottom:10px}
+
+/* CARD */
 .card{
-background:rgba(255,255,255,0.05);
+background:#1a1a2e;
 padding:15px;
 border-radius:15px;
 margin-bottom:10px;
 }
 
-/* gallery */
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+/* SCROLL */
+.scroll{display:flex;gap:10px;overflow-x:auto}
+.box{
+min-width:140px;height:100px;
+background:#1a1a2e;
+display:flex;align-items:center;justify-content:center;
+border-radius:10px;
+}
+
+/* GRID */
+display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .grid img{width:100%;border-radius:10px}
 
-/* team */
+/* TEAM */
 .team{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.member{text-align:center;background:rgba(255,255,255,0.05);padding:10px;border-radius:15px}
-.member img{width:80px;height:80px;border-radius:50%}
+.member{background:#1a1a2e;padding:10px;text-align:center;border-radius:10px}
+.member img{width:70px;height:70px;border-radius:50%}
 
-/* nav */
+/* NAV */
 nav{
-position:fixed;
-bottom:0;
-width:100%;
-display:flex;
-background:#000;
+position:fixed;bottom:0;width:100%;
+display:flex;background:#000;
 }
 nav button{
-flex:1;
-padding:10px;
-background:none;
-border:none;
-color:white;
+flex:1;padding:10px;border:none;background:none;color:white;
 }
 nav button.active{color:#7f5af0}
 
-/* popup */
-.popup{
-position:fixed;
-top:0;left:0;
-width:100%;height:100%;
-background:rgba(0,0,0,.8);
-display:none;
-justify-content:center;
-align-items:center;
-}
-.popup-box{
-background:#1a1a2e;
-padding:20px;
-border-radius:15px;
-text-align:center;
+/* INPUT */
+input{width:100%;padding:10px;border-radius:10px;border:none;margin-top:10px}
+
+/* BUTTON */
+.btn{
+margin-top:10px;padding:10px;width:100%;
+background:#7f5af0;color:white;border:none;border-radius:10px;
 }
 
-/* like */
-.like{background:#7f5af0;padding:8px;border-radius:10px;display:inline-block;margin-top:10px}
+/* POPUP */
+.popup{
+position:fixed;top:0;left:0;width:100%;height:100%;
+background:rgba(0,0,0,.8);
+display:none;justify-content:center;align-items:center;
+}
+.popup-box{
+background:#1a1a2e;padding:20px;border-radius:15px;text-align:center;
+}
+.popup img{width:100px;border-radius:50%}
 </style>
 </head>
 
@@ -329,30 +363,68 @@ text-align:center;
 <header>🔥 Zentrix Studio</header>
 
 <!-- HOME -->
-<div id="home" class="section active">
-<div class="card">
-<h3>🔥 Update</h3>
-<p>কাজ শুরু করো</p>
-<div class="like" onclick="like()">❤️ Like (<span id="count">0</span>)</div>
+<div id="home" class="page active">
+<div class="hero">
+<h1>Welcome 🎬</h1>
+<p>Creative Team Dashboard</p>
+</div>
+
+<div class="section">
+<div class="title">🔥 Trending</div>
+<div class="scroll">
+<div class="box">Edit 1</div>
+<div class="box">Edit 2</div>
+<div class="box">Edit 3</div>
+</div>
+</div>
+
+<div class="section">
+<div class="title">📢 Update</div>
+<div class="card">আজকের কাজ শুরু করো 🔥</div>
+</div>
+
+<div class="section">
+<div class="title">⭐ Stats</div>
+<div class="scroll">
+<div class="box">20 Member</div>
+<div class="box">50 Video</div>
+<div class="box">100 Post</div>
+</div>
 </div>
 </div>
 
 <!-- GALLERY -->
-<div id="gallery" class="section">
+<div id="gallery" class="page">
+<div class="section">
+<div class="title">🖼️ Gallery</div>
 <div class="grid">
 <img src="https://picsum.photos/300">
 <img src="https://picsum.photos/301">
+<img src="https://picsum.photos/302">
+<img src="https://picsum.photos/303">
+</div>
 </div>
 </div>
 
 <!-- SCRIPT -->
-<div id="script" class="section">
+<div id="script" class="page">
+<div class="section">
+<div class="title">🎬 Video</div>
 <div class="card">
-<h3>🎬 Video</h3>
 <video controls width="100%">
 <source src="your-video.mp4">
 </video>
+<p>এখানে স্ক্রিপ্ট লিখো</p>
+</div>
 </div>
 </div>
 
-<!-- TEAM -->
+<!-- TEAM + CHARGE -->
+<div id="team" class="page">
+<div class="section">
+
+<div class="title">👥 Team</div>
+
+<div class="card">
+<h3>💰 Balance: <span id="balance">0</span> ৳</h3>
+<input id="amount" placeholder="Amount">
