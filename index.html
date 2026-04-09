@@ -41,20 +41,15 @@ padding:15px;
 border-radius:15px;
 margin-bottom:10px;
 }
-.card img{width:100%;border-radius:10px;margin-top:10px}
 
 /* gallery */
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.grid img{width:100%;border-radius:10px;transition:.3s}
-.grid img:hover{transform:scale(1.05)}
+.grid img{width:100%;border-radius:10px}
 
 /* team */
 .team{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .member{text-align:center;background:rgba(255,255,255,0.05);padding:10px;border-radius:15px}
-.member img{width:80px;height:80px;border-radius:50%;border:2px solid #7f5af0}
-
-/* input */
-input{width:100%;padding:10px;border:none;border-radius:10px;margin-bottom:10px}
+.member img{width:80px;height:80px;border-radius:50%}
 
 /* nav */
 nav{
@@ -62,19 +57,15 @@ position:fixed;
 bottom:0;
 width:100%;
 display:flex;
-justify-content:space-around;
 background:#000;
-padding:10px 0;
-z-index:999;
 }
 nav button{
 flex:1;
+padding:10px;
 background:none;
 border:none;
 color:white;
-font-size:13px;
 }
-nav button span{display:block;font-size:20px}
 nav button.active{color:#7f5af0}
 
 /* popup */
@@ -93,12 +84,9 @@ padding:20px;
 border-radius:15px;
 text-align:center;
 }
-.popup img{width:100px;border-radius:50%}
 
 /* like */
-.like{margin-top:10px;background:#7f5af0;padding:8px;border-radius:10px;display:inline-block;cursor:pointer}
-
-video{width:100%;border-radius:10px}
+.like{background:#7f5af0;padding:8px;border-radius:10px;display:inline-block;margin-top:10px}
 </style>
 </head>
 
@@ -110,23 +98,16 @@ video{width:100%;border-radius:10px}
 <div id="home" class="section active">
 <div class="card">
 <h3>🔥 Update</h3>
-<p>সবাই কাজ শুরু করো</p>
+<p>কাজ শুরু করো</p>
 <div class="like" onclick="like()">❤️ Like (<span id="count">0</span>)</div>
 </div>
-</div>
-
-<!-- UPDATE -->
-<div id="announce" class="section">
-<div class="card"><h3>📢 Update</h3><p>আজকের আপডেট</p></div>
 </div>
 
 <!-- GALLERY -->
 <div id="gallery" class="section">
 <div class="grid">
-<img src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc">
-<img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf">
-<img src="https://images.unsplash.com/photo-1587620962725-abab7fe55159">
-<img src="https://images.unsplash.com/photo-1611162616475-46b635cb6868">
+<img src="https://picsum.photos/300">
+<img src="https://picsum.photos/301">
 </div>
 </div>
 
@@ -134,28 +115,21 @@ video{width:100%;border-radius:10px}
 <div id="script" class="section">
 <div class="card">
 <h3>🎬 Video</h3>
-<video controls>
+<video controls width="100%">
 <source src="your-video.mp4">
 </video>
-<p>স্ক্রিপ্ট এখানে লিখো</p>
 </div>
 </div>
 
-<!-- TEAM AUTO -->
+<!-- TEAM -->
 <div id="team" class="section">
-<input placeholder="Search member..." onkeyup="search()">
 <div class="team" id="teamList"></div>
-</div>
-
-<!-- ABOUT -->
-<div id="about" class="section">
-<div class="card"><h3>About</h3><p>Professional Creator Team 🚀</p></div>
 </div>
 
 <!-- POPUP -->
 <div class="popup" id="popup" onclick="closePopup()">
 <div class="popup-box" onclick="event.stopPropagation()">
-<img id="pimg">
+<img id="pimg" width="100">
 <h3 id="pname"></h3>
 <p id="prole"></p>
 </div>
@@ -163,76 +137,84 @@ video{width:100%;border-radius:10px}
 
 <!-- NAV -->
 <nav>
-<button onclick="show(event,'home')" class="active"><span>🏠</span>Home</button>
-<button onclick="show(event,'announce')"><span>📢</span>Update</button>
-<button onclick="show(event,'gallery')"><span>🖼️</span>Gallery</button>
-<button onclick="show(event,'script')"><span>🎬</span>Script</button>
-<button onclick="show(event,'team')"><span>👥</span>Team</button>
-<button onclick="show(event,'about')"><span>ℹ️</span>About</button>
+<button onclick="show(event,'home')" class="active">🏠</button>
+<button onclick="show(event,'gallery')">🖼️</button>
+<button onclick="show(event,'script')">🎬</button>
+<button onclick="show(event,'team')">👥</button>
 </nav>
 
 <script>
-let sections=["home","announce","gallery","script","team","about"];
+let sections=["home","gallery","script","team"];
 let current=0;
 
+/* show */
 function show(e,id){
 current=sections.indexOf(id);
+
 document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
 document.getElementById(id).classList.add('active');
+
 document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
 e.currentTarget.classList.add('active');
 }
 
-/* swipe */
-let startX=0;
-document.addEventListener("touchstart",e=>{startX=e.touches[0].clientX});
+/* SAFE SWIPE */
+let startX=0,startY=0;
+
+document.addEventListener("touchstart",e=>{
+startX=e.touches[0].clientX;
+startY=e.touches[0].clientY;
+});
+
 document.addEventListener("touchend",e=>{
 let endX=e.changedTouches[0].clientX;
-if(startX-endX>50 && current<sections.length-1){current++;switchSec();}
-if(endX-startX>50 && current>0){current--;switchSec();}
-});
-function switchSec(){
+let endY=e.changedTouches[0].clientY;
+
+let dx=startX-endX;
+let dy=startY-endY;
+
+if(Math.abs(dx)>80 && Math.abs(dy)<50){
+if(dx>0 && current<sections.length-1){current++}
+if(dx<0 && current>0){current--}
+
 document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
 document.getElementById(sections[current]).classList.add('active');
 }
+});
 
 /* like */
 let c=0;
 function like(){c++;document.getElementById("count").innerText=c}
 
 /* popup */
-function openProfile(name,role,img){
+function openProfile(n,r,i){
 document.getElementById("popup").style.display="flex";
-document.getElementById("pname").innerText=name;
-document.getElementById("prole").innerText=role;
-document.getElementById("pimg").src=img;
+pname.innerText=n;prole.innerText=r;pimg.src=i;
 }
-function closePopup(){
-document.getElementById("popup").style.display="none";
-}
+function closePopup(){popup.style.display="none"}
 
-/* MEMBERS AUTO SYSTEM */
+/* members */
 let members=[
-{name:"রহিম",role:"সম্পাদক",img:"https://i.pravatar.cc/101"},
-{name:"করিম",role:"ডিজাইনার",img:"https://i.pravatar.cc/102"},
-{name:"রাকিব",role:"এডিটর",img:"https://i.pravatar.cc/103"},
-{name:"সোহেল",role:"ম্যানেজার",img:"https://i.pravatar.cc/104"},
-{name:"জুবায়ের",role:"স্ক্রিপ্ট",img:"https://i.pravatar.cc/105"},
-{name:"তানিম",role:"মার্কেটার",img:"https://i.pravatar.cc/106"},
-{name:"নাঈম",role:"ক্রিয়েটর",img:"https://i.pravatar.cc/107"},
-{name:"সাকিব",role:"অ্যানিমেটর",img:"https://i.pravatar.cc/108"},
-{name:"আরিফ",role:"ফটোগ্রাফার",img:"https://i.pravatar.cc/109"},
-{name:"মেহেদী",role:"এডিটর",img:"https://i.pravatar.cc/110"},
-{name:"শাহিন",role:"ডিজাইনার",img:"https://i.pravatar.cc/111"},
-{name:"হাসান",role:"কনটেন্ট",img:"https://i.pravatar.cc/112"},
-{name:"ইমন",role:"ভিডিও",img:"https://i.pravatar.cc/113"},
-{name:"রিফাত",role:"এডিটর",img:"https://i.pravatar.cc/114"},
-{name:"তৌহিদ",role:"ডিজাইনার",img:"https://i.pravatar.cc/115"},
-{name:"ফাহিম",role:"ম্যানেজার",img:"https://i.pravatar.cc/116"},
-{name:"রুবেল",role:"স্ক্রিপ্ট",img:"https://i.pravatar.cc/117"},
-{name:"সাজিদ",role:"ভিডিও",img:"https://i.pravatar.cc/118"},
-{name:"তামিম",role:"এডিটর",img:"https://i.pravatar.cc/119"},
-{name:"নাবিল",role:"ক্রিয়েটর",img:"https://i.pravatar.cc/120"}
+{name:"রহিম",role:"Editor",img:"https://i.pravatar.cc/101"},
+{name:"করিম",role:"Designer",img:"https://i.pravatar.cc/102"},
+{name:"রাকিব",role:"Editor",img:"https://i.pravatar.cc/103"},
+{name:"সোহেল",role:"Manager",img:"https://i.pravatar.cc/104"},
+{name:"জুবায়ের",role:"Script",img:"https://i.pravatar.cc/105"},
+{name:"তানিম",role:"Marketer",img:"https://i.pravatar.cc/106"},
+{name:"নাঈম",role:"Creator",img:"https://i.pravatar.cc/107"},
+{name:"সাকিব",role:"Animator",img:"https://i.pravatar.cc/108"},
+{name:"আরিফ",role:"Photo",img:"https://i.pravatar.cc/109"},
+{name:"মেহেদী",role:"Editor",img:"https://i.pravatar.cc/110"},
+{name:"শাহিন",role:"Designer",img:"https://i.pravatar.cc/111"},
+{name:"হাসান",role:"Content",img:"https://i.pravatar.cc/112"},
+{name:"ইমন",role:"Video",img:"https://i.pravatar.cc/113"},
+{name:"রিফাত",role:"Editor",img:"https://i.pravatar.cc/114"},
+{name:"তৌহিদ",role:"Designer",img:"https://i.pravatar.cc/115"},
+{name:"ফাহিম",role:"Manager",img:"https://i.pravatar.cc/116"},
+{name:"রুবেল",role:"Script",img:"https://i.pravatar.cc/117"},
+{name:"সাজিদ",role:"Video",img:"https://i.pravatar.cc/118"},
+{name:"তামিম",role:"Editor",img:"https://i.pravatar.cc/119"},
+{name:"নাবিল",role:"Creator",img:"https://i.pravatar.cc/120"}
 ];
 
 function loadMembers(){
@@ -243,19 +225,10 @@ box.innerHTML+=`
 <div class="member" onclick="openProfile('${m.name}','${m.role}','${m.img}')">
 <img src="${m.img}">
 <h4>${m.name}</h4>
-<p>${m.role}</p>
 </div>`;
 });
 }
 loadMembers();
-
-/* search */
-function search(){
-let v=document.querySelector("input").value.toLowerCase();
-document.querySelectorAll(".member").forEach(m=>{
-m.style.display=m.innerText.toLowerCase().includes(v)?"block":"none";
-});
-}
 </script>
 
 </body>
@@ -273,7 +246,7 @@ body{
 background:linear-gradient(270deg,#0f0f0f,#1a1a2e,#0f0f0f);
 background-size:600% 600%;
 animation:bg 12s infinite;
-color:white;
+white;
 padding-bottom:100px;
 overflow-x:hidden;
 }
@@ -300,22 +273,17 @@ background:rgba(255,255,255,0.05);
 background:rgba(255,255,255,0.05);
 padding:15px;
 border-radius:15px;
--bottom:10px;
+margin-bottom:10px;
 }
-.card img{width:100%;border-radius:10px;margin-top:10px}
 
 /* gallery */
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.grid img{width:100%;border-radius:10px;transition:.3s}
-.grid img:hover{transform:scale(1.05)}
+.grid img{width:100%;border-radius:10px}
 
 /* team */
 .team{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .member{text-align:center;background:rgba(255,255,255,0.05);padding:10px;border-radius:15px}
-.member img{width:80px;height:80px;border-radius:50%;border:2px solid #7f5af0}
-
-/* input */
-input{width:100%;padding:10px;border:none;border-radius:10px;margin-bottom:10px}
+.member img{width:80px;height:80px;border-radius:50%}
 
 /* nav */
 nav{
@@ -323,19 +291,15 @@ position:fixed;
 bottom:0;
 width:100%;
 display:flex;
-justify-content:space-around;
 background:#000;
-padding:10px 0;
-z-index:999;
 }
 nav button{
 flex:1;
+padding:10px;
 background:none;
 border:none;
 color:white;
-font-size:13px;
 }
-nav button span{display:block;font-size:20px}
 nav button.active{color:#7f5af0}
 
 /* popup */
@@ -354,12 +318,9 @@ padding:20px;
 border-radius:15px;
 text-align:center;
 }
-.popup img{width:100px;border-radius:50%}
 
 /* like */
-.like{margin-top:10px;background:#7f5af0;padding:8px;border-radius:10px;display:inline-block;cursor:pointer}
-
-video{width:100%;border-radius:10px}
+.like{background:#7f5af0;padding:8px;border-radius:10px;display:inline-block;margin-top:10px}
 </style>
 </head>
 
@@ -371,23 +332,16 @@ video{width:100%;border-radius:10px}
 <div id="home" class="section active">
 <div class="card">
 <h3>🔥 Update</h3>
-<p>সবাই কাজ শুরু করো</p>
+<p>কাজ শুরু করো</p>
 <div class="like" onclick="like()">❤️ Like (<span id="count">0</span>)</div>
 </div>
-</div>
-
-<!-- UPDATE -->
-<div id="announce" class="section">
-<div class="card"><h3>📢 Update</h3><p>আজকের আপডেট</p></div>
 </div>
 
 <!-- GALLERY -->
 <div id="gallery" class="section">
 <div class="grid">
-<img src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc">
-<img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf">
-<img src="https://images.unsplash.com/photo-1587620962725-abab7fe55159">
-<img src="https://images.unsplash.com/photo-1611162616475-46b635cb6868">
+<img src="https://picsum.photos/300">
+<img src="https://picsum.photos/301">
 </div>
 </div>
 
@@ -395,18 +349,10 @@ video{width:100%;border-radius:10px}
 <div id="script" class="section">
 <div class="card">
 <h3>🎬 Video</h3>
-<video controls>
+<video controls width="100%">
 <source src="your-video.mp4">
 </video>
-<p>স্ক্রিপ্ট এখানে লিখো</p>
 </div>
 </div>
 
-<!-- TEAM AUTO -->
-<div id="team" class="section">
-<input placeholder="Search member..." onkeyup="search()">
-<div class="team" id="teamList"></div>
-</div>
-
-<!-- ABOUT -->
-<div id="about" class="section">
+<!-- TEAM -->
