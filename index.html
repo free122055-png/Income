@@ -6,16 +6,30 @@
 <title>Zentrix Studio</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zentrix Studio</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+max-width:100%;
+font-family:'Poppins',sans-serif;
+}
 
 body{
 background:linear-gradient(270deg,#0f0f0f,#1a1a2e,#0f0f0f);
 background-size:600% 600%;
 animation:bg 12s infinite;
 color:white;
-padding-bottom:80px;
+padding-bottom:90px;
 overflow-x:hidden;
 }
 
@@ -25,27 +39,29 @@ overflow-x:hidden;
 100%{background-position:0%}
 }
 
+/* HEADER */
 header{
 text-align:center;
-padding:20px;
-font-size:24px;
+padding:18px;
+font-size:22px;
 background:rgba(255,255,255,0.05);
-backdrop-filter:blur(15px);
+backdrop-filter:blur(12px);
 }
 
 /* SECTION */
 .section{
 display:none;
 padding:15px;
-min-height:80vh;
+min-height:100vh;
+overflow-y:auto;
 }
 .active{
 display:block;
-animation:fade 0.5s;
+animation:fade 0.4s;
 }
 
 @keyframes fade{
-from{opacity:0;transform:translateY(20px);}
+from{opacity:0;transform:translateY(15px);}
 to{opacity:1;}
 }
 
@@ -53,18 +69,16 @@ to{opacity:1;}
 .card{
 background:rgba(255,255,255,0.05);
 padding:15px;
-border-radius:20px;
+border-radius:18px;
 margin-bottom:15px;
-backdrop-filter:blur(20px);
-transition:0.3s;
+backdrop-filter:blur(15px);
+overflow:hidden;
 }
-.card:hover{
-transform:translateY(-5px);
-box-shadow:0 0 20px #7f5af0;
-}
+
 .card img{
 width:100%;
-border-radius:15px;
+height:auto;
+border-radius:12px;
 margin-top:10px;
 }
 
@@ -85,6 +99,7 @@ display:grid;
 grid-template-columns:repeat(2,1fr);
 gap:10px;
 }
+
 .member{
 text-align:center;
 padding:12px;
@@ -92,6 +107,7 @@ border-radius:15px;
 background:rgba(255,255,255,0.05);
 cursor:pointer;
 }
+
 .member img{
 width:80px;
 height:80px;
@@ -113,16 +129,12 @@ align-items:center;
 flex-direction:column;
 z-index:999;
 }
-#profile img{
-width:120px;
-border-radius:50%;
-}
 
 /* SEARCH */
 input{
 width:100%;
 padding:12px;
-border-radius:12px;
+border-radius:10px;
 border:none;
 margin-bottom:10px;
 }
@@ -139,7 +151,7 @@ padding:10px;
 border-radius:10px;
 }
 
-/* NAV (SCROLLABLE) */
+/* NAV */
 nav{
 position:fixed;
 bottom:0;
@@ -147,15 +159,15 @@ width:100%;
 overflow-x:auto;
 display:flex;
 background:rgba(0,0,0,0.95);
-backdrop-filter:blur(20px);
+backdrop-filter:blur(15px);
 }
 
 nav::-webkit-scrollbar{display:none;}
 
 nav button{
-min-width:80px;
-padding:12px 8px;
-font-size:15px;
+min-width:85px;
+padding:12px 6px;
+font-size:14px;
 border:none;
 background:none;
 color:white;
@@ -169,7 +181,7 @@ transform:scale(1.1);
 
 footer{
 text-align:center;
-padding:15px;
+padding:10px;
 opacity:0.5;
 }
 </style>
@@ -245,7 +257,6 @@ opacity:0.5;
 
 <!-- PROFILE -->
 <div id="profile" onclick="closeProfile()">
-<img id="pimg">
 <h2 id="pname"></h2>
 <p id="prole"></p>
 </div>
@@ -271,12 +282,12 @@ opacity:0.5;
 <footer>© Zentrix Studio</footer>
 
 <script>
-let sections = ["home","announce","gallery","script","team","about"];
-let current = 0;
+let sections=["home","announce","gallery","script","team","about"];
+let current=0;
 
-/* CLICK NAV */
+/* NAV CLICK */
 function show(e,id){
-current = sections.indexOf(id);
+current=sections.indexOf(id);
 
 document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
 document.getElementById(id).classList.add('active');
@@ -289,17 +300,17 @@ e.currentTarget.classList.add('active');
 let startX=0;
 
 document.addEventListener("touchstart",e=>{
-startX = e.touches[0].clientX;
+startX=e.touches[0].clientX;
 });
 
 document.addEventListener("touchend",e=>{
-let endX = e.changedTouches[0].clientX;
+let endX=e.changedTouches[0].clientX;
 
-if(startX - endX > 50 && current < sections.length-1){
+if(startX-endX>50 && current<sections.length-1){
 current++;
 switchSection();
 }
-if(endX - startX > 50 && current > 0){
+if(endX-startX>50 && current>0){
 current--;
 switchSection();
 }
@@ -318,7 +329,6 @@ function openProfile(n,r,i){
 profile.style.display="flex";
 pname.innerText=n;
 prole.innerText=r;
-pimg.src=i;
 }
 function closeProfile(){
 profile.style.display="none";
@@ -334,4 +344,223 @@ m.style.display=m.innerText.toLowerCase().includes(v)?"block":"none";
 </script>
 
 </body>
-</html>
+</html>￼Enter
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+max-width:100%;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:linear-gradient(270deg,#0f0f0f,#1a1a2e,#0f0f0f);
+background-size:600% 600%;
+animation:bg 12s infinite;
+color:white;
+padding-bottom:90px;
+overflow-x:hidden;
+}
+
+@keyframes bg{
+0%{background-position:0%}
+50%{background-position:100%}
+100%{background-position:0%}
+}
+
+/* HEADER */
+header{
+text-align:center;
+padding:18px;
+font-size:22px;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(12px);
+}
+
+/* SECTION */
+.section{
+display:none;
+padding:15px;
+min-height:100vh;
+overflow-y:auto;
+}
+.active{
+display:block;
+animation:fade 0.4s;
+}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(15px);}
+to{opacity:1;}
+}
+
+/* CARD */
+.card{
+background:rgba(255,255,255,0.05);
+padding:15px;
+border-radius:18px;
+margin-bottom:15px;
+backdrop-filter:blur(15px);
+overflow:hidden;
+}
+
+.card img{
+width:100%;
+height:auto;
+border-radius:12px;
+margin-top:10px;
+}
+
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+.grid img{
+width:100%;
+border-radius:10px;
+}
+
+/* TEAM */
+.team{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.member{
+text-align:center;
+padding:12px;
+border-radius:15px;
+background:rgba(255,255,255,0.05);
+cursor:pointer;
+}
+
+.member img{
+width:80px;
+height:80px;
+border-radius:50%;
+border:2px solid #7f5af0;
+}
+
+/* PROFILE */
+#profile{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#000;
+display:none;
+y-content:center;
+align-items:center;
+flex-direction:column;
+z-index:999;
+}
+
+/* SEARCH */
+input{
+width:100%;
+padding:12px;
+border-radius:10px;
+border:none;
+margin-bottom:10px;
+}
+
+/* STATS */
+.stats{
+display:flex;
+justify-content:space-around;
+margin-top:10px;
+}
+.stat{
+background:rgba(255,255,255,0.05);
+padding:10px;
+border-radius:10px;
+}
+
+/* NAV */
+nav{
+position:fixed;
+bottom:0;
+width:100%;
+overflow-x:auto;
+display:flex;
+background:rgba(0,0,0,0.95);
+backdrop-filter:blur(15px);
+}
+
+nav::-webkit-scrollbar{display:none;}
+
+nav button{
+min-width:85px;
+padding:12px 6px;
+font-size:14px;
+border:none;
+background:none;
+color:white;
+flex-shrink:0;
+}
+
+nav button.active{
+color:#7f5af0;
+transform:scale(1.1);
+}
+
+footer{
+text-align:center;
+padding:10px;
+opacity:0.5;
+}
+</style>
+</head>
+
+<body>
+
+<header>🔥 Zentrix Studio</header>
+
+<!-- HOME -->
+<div id="home" class="section active">
+<div class="card">
+<h3>🔥 বর্তমান আপডেট</h3>
+<p>সবাই কাজ শুরু করো</p>
+<img src="https://picsum.photos/400">
+</div>
+
+<div class="stats">
+<div class="stat">👥 25 Members</div>
+<div class="stat">📸 120 Posts</div>
+</div>
+</div>
+
+<!-- UPDATE -->
+<div id="announce" class="section">
+<div class="card">
+<h3>📢 Announcement</h3>
+<p>আজ রাত ১০টার মধ্যে কাজ শেষ করো</p>
+</div>
+</div>
+
+<!-- GALLERY -->
+<div id="gallery" class="section">
+<div class="grid">
+<img src="https://picsum.photos/401">
+<img src="https://picsum.photos/402">
+<img src="https://picsum.photos/403">
+<img src="https://picsum.photos/404">
+</div>
+</div>
+
+<!-- SCRIPT -->
+<div id="script" class="section">
+<div class="card">
+<h3>🎬 ভিডিও স্ক্রিপ্ট</h3>
+<p>আজকের ভিডিওতে নতুন কাজ দেখানো হবে। সবাই মনোযোগ দাও।</p>
+</div>
+
+<div class="card">
+<h3>📢 নির্দেশনা</h3>
+<p>১. সময়মতো কাজ করো<br>২. ভিডিও ছোট রাখো<br>৩. কোয়ালিটি ঠিক রাখো</p>
+</div>
