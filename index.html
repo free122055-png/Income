@@ -8,126 +8,170 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Poppins', sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
 
 body{
-  background: linear-gradient(135deg,#0f0f0f,#1a1a2e);
-  color:white;
-  overflow-x:hidden;
+background:linear-gradient(270deg,#0f0f0f,#1a1a2e,#0f0f0f);
+background-size:600% 600%;
+animation:bg 12s infinite;
+color:white;
+}
+
+@keyframes bg{
+0%{background-position:0%}
+50%{background-position:100%}
+100%{background-position:0%}
 }
 
 /* HEADER */
 header{
-  padding:15px;
-  text-align:center;
-  font-size:24px;
-  font-weight:700;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
-  position:sticky;
-  top:0;
+text-align:center;
+padding:20px;
+font-size:26px;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(15px);
 }
 
 /* NAV */
 nav{
-  display:flex;
-  justify-content:space-around;
-  padding:10px;
-  background:#111;
+position:fixed;
+bottom:0;
+width:100%;
+display:flex;
+justify-content:space-around;
+padding:10px;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(15px);
 }
 
 nav button{
-  background:none;
-  border:none;
-  color:white;
-  font-size:14px;
+background:none;
+border:none;
+color:white;
+font-size:13px;
 }
 
-/* SECTIONS */
+/* SECTION */
 .section{
-  display:none;
-  padding:15px;
-  animation:fade 0.5s ease;
+display:none;
+padding:15px;
+padding-bottom:70px;
 }
 
-.active{
-  display:block;
-}
+.active{display:block;animation:fade 0.5s;}
 
 @keyframes fade{
-  from{opacity:0;transform:translateY(20px);}
-  to{opacity:1;transform:translateY(0);}
+from{opacity:0;transform:translateY(20px);}
+to{opacity:1;}
 }
 
 /* CARD */
 .card{
-  background: rgba(255,255,255,0.05);
-  padding:15px;
-  margin-bottom:15px;
-  border-radius:15px;
-  backdrop-filter: blur(10px);
-  box-shadow:0 0 10px rgba(0,0,0,0.5);
+background:rgba(255,255,255,0.05);
+padding:15px;
+border-radius:20px;
+margin-bottom:15px;
+backdrop-filter:blur(20px);
+transition:0.3s;
 }
 
-/* IMAGE */
+.card:hover{
+transform:translateY(-5px);
+box-shadow:0 0 20px #7f5af0;
+}
+
 .card img{
-  width:100%;
-  border-radius:10px;
-  margin-top:10px;
+width:100%;
+border-radius:15px;
+margin-top:10px;
+}
+
+/* LIKE */
+.like{
+margin-top:10px;
+padding:8px;
+border:none;
+border-radius:10px;
+background:linear-gradient(45deg,#7f5af0,#2cb67d);
+color:white;
+}
+
+/* GALLERY GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.grid img{
+width:100%;
+border-radius:10px;
 }
 
 /* TEAM */
 .team{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
 }
 
 .member{
-  background:rgba(255,255,255,0.05);
-  padding:10px;
-  border-radius:15px;
-  text-align:center;
+text-align:center;
+padding:10px;
+border-radius:15px;
+background:rgba(255,255,255,0.05);
 }
 
 .member img{
-  width:80px;
-  height:80px;
-  border-radius:50%;
-  border:2px solid #7f5af0;
+width:80px;
+height:80px;
+border-radius:50%;
+border:2px solid #7f5af0;
+}
+
+/* PROFILE MODAL */
+#profile{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#000;
+display:none;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+animation:fade 0.4s;
+}
+
+#profile img{
+width:120px;
+border-radius:50%;
+}
+
+/* DASHBOARD */
+.stats{
+display:flex;
+justify-content:space-around;
+}
+
+.stat{
+background:rgba(255,255,255,0.05);
+padding:15px;
+border-radius:15px;
 }
 
 /* SEARCH */
 input{
-  width:100%;
-  padding:10px;
-  border:none;
-  border-radius:10px;
-  margin-bottom:10px;
-}
-
-/* BUTTON */
-.like{
-  margin-top:10px;
-  padding:5px 10px;
-  border:none;
-  border-radius:8px;
-  background:#7f5af0;
-  color:white;
+width:100%;
+padding:10px;
+border-radius:10px;
+border:none;
+margin-bottom:10px;
 }
 
 /* FOOTER */
-footer{
-  text-align:center;
-  padding:10px;
-  font-size:12px;
-  opacity:0.6;
-}
+footer{text-align:center;padding:15px;opacity:0.5;}
 </style>
 </head>
 
@@ -135,188 +179,99 @@ footer{
 
 <header>🔥 Zentrix Studio</header>
 
-<nav>
-<button onclick="show('home')">Home</button>
-<button onclick="show('announce')">Updates</button>
-<button onclick="show('gallery')">Gallery</button>
-<button onclick="show('team')">Team</button>
-<button onclick="show('about')">About</button>
-</nav>
-
 <!-- HOME -->
 <div id="home" class="section active">
-  <div class="card">
-    <h3>আজকের আপডেট</h3>
-    <p>সবাই কাজ শুরু করো 🔥</p>
-    <img src="https://picsum.photos/400">
-    <button class="like" onclick="like()">❤️ Like</button>
-  </div>
+<div class="card">
+<h3>🔥 বর্তমান আপডেট</h3>
+<p>সবাই কাজ শুরু করো</p>
+<img src="https://picsum.photos/400">
+<button class="like">❤️ Like</button>
 </div>
 
-<!-- ANNOUNCEMENT -->
-<div id="announce" class="section">
-  <div class="card">
-    <h3>Important Notice</h3>
-    <p>আজ রাত ১০টার মধ্যে কাজ শেষ করো</p>
-  </div>
+<div class="stats">
+<div class="stat">👥 25 Members</div>
+<div class="stat">📸 120 Posts</div>
+</div>
 </div>
 
 <!-- GALLERY -->
 <div id="gallery" class="section">
-  <div class="card">
-    <img src="https://picsum.photos/401">
-  </div>
-  <div class="card">
-    <img src="https://picsum.photos/402">
-  </div>
+<div class="grid">
+<img src="https://picsum.photos/401">
+<img src="https://picsum.photos/402">
+<img src="https://picsum.photos/403">
+<img src="https://picsum.photos/404">
+</div>
 </div>
 
 <!-- TEAM -->
 <div id="team" class="section">
-  <input type="text" placeholder="Search member...">
+<input type="text" placeholder="Search..." onkeyup="search()">
 
-  <div class="team">
+<div class="team">
+<div class="member" onclick="openProfile('Rahim','Editor','https://i.pravatar.cc/100')">
+<img src="https://i.pravatar.cc/100">
+<h4>Rahim</h4>
+<p>Editor</p>
+</div>
 
-    <div class="member">
-      <img src="https://i.pravatar.cc/100">
-      <h4>Rahim</h4>
-      <p>Editor</p>
-    </div>
+<div class="member" onclick="openProfile('Karim','Designer','https://i.pravatar.cc/101')">
+<img src="https://i.pravatar.cc/101">
+<h4>Karim</h4>
+<p>Designer</p>
+</div>
+</div>
+</div>
 
-    <div class="member">
-      <img src="https://i.pravatar.cc/101">
-      <h4>Karim</h4>
-      <p>Designer</p>
-    </div>
-
-  </div>
+<!-- PROFILE -->
+<div id="profile" onclick="closeProfile()">
+<img id="pimg">
+<h2 id="pname"></h2>
+<p id="prole"></p>
 </div>
 
 <!-- ABOUT -->
 <div id="about" class="section">
-  <div class="card">
-    <h3>About Zentrix Studio</h3>
-    <p>আমরা একটি professional content creator team 🚀</p>
-  </div>
+<div class="card">
+<h3>Zentrix Studio</h3>
+<p>Professional Creator Team 🚀</p>
 </div>
+</div>
+
+<!-- NAV -->
+<nav>
+<button onclick="show('home')">🏠</button>
+<button onclick="show('gallery')">🖼️</button>
+<button onclick="show('team')">👥</button>
+<button onclick="show('about')">ℹ️</button>
+</nav>
 
 <footer>© Zentrix Studio</footer>
 
 <script>
 function show(id){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
 }
 
-function like(){
-  alert("Liked ❤️");
+function openProfile(n,r,i){
+document.getElementById("profile").style.display="flex";
+pname.innerText=n;
+prole.innerText=r;
+pimg.src=i;
+}
+
+function closeProfile(){
+document.getElementById("profile").style.display="none";
+}
+
+function search(){
+let v=document.querySelector("input").value.toLowerCase();
+document.querySelectorAll(".member").forEach(m=>{
+m.style.display=m.innerText.toLowerCase().includes(v)?"block":"none";
+});
 }
 </script>
 
 </body>
-</html>￼EnterYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zentrix Studio</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-
-<style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Poppins', sans-serif;
-}
-
-body{
-  background: linear-gradient(135deg,#0f0f0f,#1a1a2e);
-  color:white;
-  overflow-x:hidden;
-}
-
-/* HEADER */
-header{
-  padding:15px;
-  text-align:center;
-  font-size:24px;
-  font-weight:700;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
-  position:sticky;
-  top:0;
-}
-
-/* NAV */
-nav{
-  display:flex;
-  justify-content:space-around;
-  padding:10px;
-  background:#111;
-}
-
-nav button{
-  background:none;
-  border:none;
-  color:white;
-  font-size:14px;
-}
-
-/* SECTIONS */
-.section{
-  display:none;
-  padding:15px;
-  animation:fade 0.5s ease;
-}
-
-.active{
-  display:block;
-}
-
-@keyframes fade{
-  from{opacity:0;transform:translateY(20px);}
-  to{opacity:1;transform:translateY(0);}
-}
-
-/* CARD */
-.card{
-  background: rgba(255,255,255,0.05);
-  padding:15px;
-  margin-bottom:15px;
-  border-radius:15px;
-  backdrop-filter: blur(10px);
-  box-shadow:0 0 10px rgba(0,0,0,0.5);
-}
-
-/* IMAGE */
-.card img{
-  width:100%;
-  border-radius:10px;
-  margin-top:10px;
-}
-
-/* TEAM */
-.team{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-}
-
-.member{
-  background:rgba(255,255,255,0.05);
-  padding:10px;
-  border-radius:15px;
-  text-align:center;
-}
-
-.member img{
-  width:80px;
-  height:80px;
-  border-radius:50%;
-  border:2px solid #7f5af0;
-}
-
-/* SEARCH */
-input{
+</html>
