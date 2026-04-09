@@ -1,119 +1,322 @@
-here<!DOCTYPE html><html lang="bn">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🔥 বিশ্বাস আপনার সততা আমাদের</title><style>
-/* ===== ORIGINAL CSS (UNCHANGED) ===== */
-body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);color:white;}
-header{text-align:center;padding:30px;}
-header h1{font-size:35px;background:linear-gradient(90deg,#ff512f,#dd2476,#00c6ff);-webkit-background-clip:text;color:transparent;}
-.controls{text-align:center;padding:10px;}
-#searchBox{width:85%;padding:12px;border-radius:25px;border:none;background:#ffffff15;color:white;outline:none;}
-.simBar{display:flex;overflow-x:auto;gap:10px;padding:10px;scrollbar-width:none;}
-.simBar::-webkit-scrollbar{display:none;}
-.simBtn{padding:10px 18px;border-radius:25px;background:#ffffff10;cursor:pointer;transition:0.3s;}
-.simBtn:hover{background:#00ffd5;color:black;}
-.activeSIM{background:#00ffd5;color:black;box-shadow:0 0 10px #00ffd5;}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;padding:15px;}
-.box{background:rgba(255,255,255,0.08);border-radius:20px;padding:15px;text-align:center;transition:0.3s;position:relative;}
-.box:hover{transform:translateY(-5px) scale(1.03);box-shadow:0 0 15px #00ffd5;}
-.gb{font-size:22px;color:#00ffd5;}
-.price{font-size:20px;color:#ffcc00;}
-.valid{font-size:13px;opacity:0.8;}
-button{margin-top:10px;padding:8px 15px;border:none;border-radius:20px;background:linear-gradient(135deg,#ff512f,#dd2476);color:white;cursor:pointer;transition:0.3s;}
-button:hover{transform:scale(1.1);}
-.sectionTitle{text-align:center;margin-top:20px;font-size:20px;}
+<title>Zentrix Studio</title>
 
-/* ===== NEW ADDITIONS ONLY ===== */
-.badge{position:absolute;top:10px;left:10px;background:#ff0050;padding:4px 8px;border-radius:10px;font-size:10px;}
-.best{position:absolute;top:10px;right:10px;background:#00ffd5;color:black;padding:4px 8px;border-radius:10px;font-size:10px;}
-.darkMode{background:#111 !important;color:white !important;}
-.toast{position:fixed;bottom:20px;right:20px;background:#00ffd5;color:black;padding:10px 20px;border-radius:10px;display:none;}
-</style></head><body><!-- LOGIN SYSTEM KEPT (UNCHANGED) --><script>
-if(!localStorage.getItem("user")){
-  window.location.href = "user-login.html";
-}
-</script><div id="toast" class="toast">Done</div><div class="controls">
-<input type="text" id="searchBox" placeholder="🔍 Search GB / Price...">
-</div><div style="text-align:center;">
-<button onclick="sortOffers('price')">📊 Price</button>
-<button onclick="sortOffers('gb')">📊 GB</button>
-<button onclick="toggleDark()">🌙 Mode</button>
-</div><div id="main"></div><script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
-let currentSIM="All";
-let sortType="";
-
-function showToast(msg){
-let t=document.getElementById("toast");
-t.innerText=msg;
-t.style.display="block";
-setTimeout(()=>t.style.display="none",2000);
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins', sans-serif;
 }
 
-function toggleDark(){
-document.body.classList.toggle("darkMode");
+body{
+  background: linear-gradient(135deg,#0f0f0f,#1a1a2e);
+  color:white;
+  overflow-x:hidden;
 }
 
-function sortOffers(type){
-sortType=type;
-renderOffers();
+/* HEADER */
+header{
+  padding:15px;
+  text-align:center;
+  font-size:24px;
+  font-weight:700;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  position:sticky;
+  top:0;
 }
 
-function bkashPay(n,p,v){
-let number="01XXXXXXXXX";
-let msg=`💰 Bkash Payment\nOffer: ${n}\nAmount: ${p}৳\n${v}\nSend Money: ${number}`;
-showToast("Redirecting...");
-window.location.href="https://wa.me/8801624228476?text="+encodeURIComponent(msg);
+/* NAV */
+nav{
+  display:flex;
+  justify-content:space-around;
+  padding:10px;
+  background:#111;
 }
 
-function renderOffers(){
-let html="";
-let search=document.getElementById("searchBox").value.toLowerCase();
-
-for(let sim in offers){
-html+=`<div class="sectionTitle">${sim}</div>`;
-
-for(let pack in offers[sim]){
-let data=[...offers[sim][pack]];
-
-if(sortType==='price') data.sort((a,b)=>a.price-b.price);
-if(sortType==='gb') data.sort((a,b)=>parseInt(a.name)-parseInt(b.name));
-
-html+=`<div class="sectionTitle">${pack}</div><div class="grid">`;
-
-data.forEach(o=>{
-if(o.name==="loading") return;
-let text=(o.name+o.price).toLowerCase();
-if(text.includes(search)){
-html+=`
-<div class="box">
-${o.popular?'<div class="badge">Popular</div>':''}
-${o.best?'<div class="best">Best</div>':''}
-<div class="gb">${o.name}</div>
-<div class="price">${o.price}৳</div>
-<div class="valid">${o.validity}</div>
-<div style="color:gold;">⭐⭐⭐⭐☆</div>
-<button onclick="buy('${o.name}','${o.price}','${o.validity}')">🚀 Buy</button>
-<button onclick="bkashPay('${o.name}','${o.price}','${o.validity}')">💰 bKash</button>
-</div>`;
-}
-});
-
-html+=`</div>`;
-}
+nav button{
+  background:none;
+  border:none;
+  color:white;
+  font-size:14px;
 }
 
-document.getElementById("main").innerHTML=html;
+/* SECTIONS */
+.section{
+  display:none;
+  padding:15px;
+  animation:fade 0.5s ease;
 }
 
-function buy(n,p,v){
-let msg=`${n} ${p}৳ ${v}`;
-window.location.href="https://wa.me/8801624228476?text="+encodeURIComponent(msg);
+.active{
+  display:block;
 }
 
-renderOffers();
-document.getElementById("searchBox").addEventListener("input",renderOffers);
+@keyframes fade{
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
+}
 
-</script></body>
-</html>
+/* CARD */
+.card{
+  background: rgba(255,255,255,0.05);
+  padding:15px;
+  margin-bottom:15px;
+  border-radius:15px;
+  backdrop-filter: blur(10px);
+  box-shadow:0 0 10px rgba(0,0,0,0.5);
+}
+
+/* IMAGE */
+.card img{
+  width:100%;
+  border-radius:10px;
+  margin-top:10px;
+}
+
+/* TEAM */
+.team{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.member{
+  background:rgba(255,255,255,0.05);
+  padding:10px;
+  border-radius:15px;
+  text-align:center;
+}
+
+.member img{
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  border:2px solid #7f5af0;
+}
+
+/* SEARCH */
+input{
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:10px;
+  margin-bottom:10px;
+}
+
+/* BUTTON */
+.like{
+  margin-top:10px;
+  padding:5px 10px;
+  border:none;
+  border-radius:8px;
+  background:#7f5af0;
+  color:white;
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:10px;
+  font-size:12px;
+  opacity:0.6;
+}
+</style>
+</head>
+
+<body>
+
+<header>🔥 Zentrix Studio</header>
+
+<nav>
+<button onclick="show('home')">Home</button>
+<button onclick="show('announce')">Updates</button>
+<button onclick="show('gallery')">Gallery</button>
+<button onclick="show('team')">Team</button>
+<button onclick="show('about')">About</button>
+</nav>
+
+<!-- HOME -->
+<div id="home" class="section active">
+  <div class="card">
+    <h3>আজকের আপডেট</h3>
+    <p>সবাই কাজ শুরু করো 🔥</p>
+    <img src="https://picsum.photos/400">
+    <button class="like" onclick="like()">❤️ Like</button>
+  </div>
+</div>
+
+<!-- ANNOUNCEMENT -->
+<div id="announce" class="section">
+  <div class="card">
+    <h3>Important Notice</h3>
+    <p>আজ রাত ১০টার মধ্যে কাজ শেষ করো</p>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<div id="gallery" class="section">
+  <div class="card">
+    <img src="https://picsum.photos/401">
+  </div>
+  <div class="card">
+    <img src="https://picsum.photos/402">
+  </div>
+</div>
+
+<!-- TEAM -->
+<div id="team" class="section">
+  <input type="text" placeholder="Search member...">
+
+  <div class="team">
+
+    <div class="member">
+      <img src="https://i.pravatar.cc/100">
+      <h4>Rahim</h4>
+      <p>Editor</p>
+    </div>
+
+    <div class="member">
+      <img src="https://i.pravatar.cc/101">
+      <h4>Karim</h4>
+      <p>Designer</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div id="about" class="section">
+  <div class="card">
+    <h3>About Zentrix Studio</h3>
+    <p>আমরা একটি professional content creator team 🚀</p>
+  </div>
+</div>
+
+<footer>© Zentrix Studio</footer>
+
+<script>
+function show(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function like(){
+  alert("Liked ❤️");
+}
+</script>
+
+</body>
+</html>￼EnterYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zentrix Studio</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins', sans-serif;
+}
+
+body{
+  background: linear-gradient(135deg,#0f0f0f,#1a1a2e);
+  color:white;
+  overflow-x:hidden;
+}
+
+/* HEADER */
+header{
+  padding:15px;
+  text-align:center;
+  font-size:24px;
+  font-weight:700;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  position:sticky;
+  top:0;
+}
+
+/* NAV */
+nav{
+  display:flex;
+  justify-content:space-around;
+  padding:10px;
+  background:#111;
+}
+
+nav button{
+  background:none;
+  border:none;
+  color:white;
+  font-size:14px;
+}
+
+/* SECTIONS */
+.section{
+  display:none;
+  padding:15px;
+  animation:fade 0.5s ease;
+}
+
+.active{
+  display:block;
+}
+
+@keyframes fade{
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* CARD */
+.card{
+  background: rgba(255,255,255,0.05);
+  padding:15px;
+  margin-bottom:15px;
+  border-radius:15px;
+  backdrop-filter: blur(10px);
+  box-shadow:0 0 10px rgba(0,0,0,0.5);
+}
+
+/* IMAGE */
+.card img{
+  width:100%;
+  border-radius:10px;
+  margin-top:10px;
+}
+
+/* TEAM */
+.team{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.member{
+  background:rgba(255,255,255,0.05);
+  padding:10px;
+  border-radius:15px;
+  text-align:center;
+}
+
+.member img{
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  border:2px solid #7f5af0;
+}
+
+/* SEARCH */
+input{
