@@ -1,0 +1,56 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "System users and their metadata.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "admin"] },
+        "verificationStatus": { "type": "string", "enum": ["none", "pending", "approved", "rejected"] },
+        "lastActivity": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Verification": {
+      "title": "Verification",
+      "description": "KYC verification submissions.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "email": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "sections": { "type": "object" },
+        "riskScore": { "type": "integer" },
+        "submittedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "status", "submittedAt"]
+    },
+    "Admin": {
+      "title": "Admin",
+      "description": "Authorized administrators list.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "addedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "User profiles tracked by UID."
+    },
+    "verifications/{verificationId}": {
+      "schema": "Verification",
+      "description": "Verification applications."
+    },
+    "admins/{adminId}": {
+      "schema": "Admin",
+      "description": "Admin allowlist."
+    }
+  }
+}
